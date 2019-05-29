@@ -32,7 +32,11 @@ public interface Seznam<Tip> {
     // vrne elemente kot List<Tip>
     List<Tip> asList();
 
-    //Izpiše podatkovno strukturo
+    StudentVpisna get(int vpisna);
+
+    StudentImePriimek get(String ime, String priimek);
+
+        //Izpiše podatkovno strukturo
     void print();
 
     //shrani podatkovno strukturo v datoteko

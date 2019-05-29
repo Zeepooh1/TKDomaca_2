@@ -6,10 +6,6 @@ public class Studenti {
     public static void main(String[] args)
     {
         SeznamiUV seznamiUV = new SeznamiUV();
-        seznamiUV.addImpl("pv", new PrioritetnaVrsta<>());
-        seznamiUV.addImpl("sk", new Sklad<>());
-        seznamiUV.addImpl("bst", new Bst<>());
-        seznamiUV.addImpl("23", new Drevo23<>());
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String input;
         String output;
@@ -18,7 +14,7 @@ public class Studenti {
         {
             do
             {
-                System.out.print("Enter command: ");
+                System.out.print("command> ");
                 input = br.readLine();
                 output = seznamiUV.processInput(input);
                 System.out.println(output);

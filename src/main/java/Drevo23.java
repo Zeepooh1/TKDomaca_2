@@ -655,6 +655,71 @@ public class Drevo23<Tip extends Comparable> implements Seznam<Tip> {
     }
 
     @Override
+    public StudentVpisna get(int vpisna){
+        Element23<Tip> currNode = rootNode;
+        Tip e = (Tip)new StudentVpisna();
+        ((StudentVpisna)e).setId(vpisna);
+        boolean found = false;
+        int foundType;
+        while(currNode != null && !found){
+            foundType = currNode.has(e);
+            switch(foundType){
+                case 0:
+                    found = true;
+                    break;
+                case 1:
+                    currNode = currNode.L;
+                    continue;
+                case 2:
+                    currNode = currNode.S;
+                    continue;
+                case 3:
+                    currNode = currNode.R;
+                    break;
+            }
+        }
+
+        if(!found) return null;
+
+        if(currNode.valOne.compareTo(e) == 0) return (StudentVpisna)currNode.valOne;
+        return (StudentVpisna)currNode.valTwo;
+
+    }
+
+    @Override
+    public StudentImePriimek get(String ime, String priimek){
+        Element23<Tip> currNode = rootNode;
+        Tip e = (Tip)new StudentImePriimek();
+        ((StudentImePriimek)e).setIme(ime);
+        ((StudentImePriimek)e).setPriimek(priimek);
+        boolean found = false;
+        int foundType;
+        while(currNode != null && !found){
+            foundType = currNode.has(e);
+            switch(foundType){
+                case 0:
+                    found = true;
+                    break;
+                case 1:
+                    currNode = currNode.L;
+                    continue;
+                case 2:
+                    currNode = currNode.S;
+                    continue;
+                case 3:
+                    currNode = currNode.R;
+                    break;
+            }
+        }
+
+        if(!found) return null;
+
+        if(currNode.valOne.compareTo(e) == 0) return (StudentImePriimek)currNode.valOne;
+        return (StudentImePriimek)currNode.valTwo;
+
+    }
+
+    @Override
     public void print() {
 
     }
