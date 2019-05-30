@@ -731,6 +731,8 @@ public class Drevo23<Tip extends Comparable> implements Seznam<Tip> {
     @Override
     public void save(OutputStream outputStream) throws IOException {
         ObjectOutputStream out = new ObjectOutputStream(outputStream);
+        out.writeInt(size);
+        out.writeInt(depth);
         save(rootNode, out);
     }
 
@@ -762,19 +764,35 @@ public class Drevo23<Tip extends Comparable> implements Seznam<Tip> {
     @Override
     public void restore(InputStream inputStream) throws IOException, ClassNotFoundException {
         ObjectInputStream in = new ObjectInputStream(inputStream);
+        this.size = in.readInt();
+        this.depth = in.readInt();
         rootNode = restore(in, null);
     }
 
     private Element23<Tip> restore(ObjectInputStream in, Element23<Tip> above) throws IOException, ClassNotFoundException{
         Element23<Tip> node = new Element23<>(above);
         boolean isLeaf = in.readBoolean();
+        int numNode = in.readInt();
+
         if(isLeaf){
-            int numNode = in.readInt();
             node.valOne = (Tip)in.readObject();
             if(numNode == 2){
                 node.valTwo = (Tip)in.readObject();
             }
         }
+        else{
+            node.L = restore(in, node);
+            node.S = restore(in, node);
+            if(numNode == 2){
+                node.R = restore(in, node);
+            }
+            node.valOne = (Tip)in.readObject();
+            if(numNode == 2){
+                node.valTwo = (Tip)in.readObject();
+            }
+        }
+
+        return node;
 
     }
 }

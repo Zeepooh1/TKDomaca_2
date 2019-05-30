@@ -76,11 +76,18 @@ public class SeznamiUV {
                     }
                     break;
 
-//                case "reset":
-//                    while (!seznam.isEmpty()) {
-//                        seznam.removeFirst();
-//                    }
-//                    break;
+                case "reset":
+                    System.out.print("reset> Are you sure (y|n): ");
+                    if("y".equals(stdin.next())){
+                        seznam_imePriimek = new Drevo23<>();
+                        seznam_vpisne = new Drevo23<>();
+                    }
+                    break;
+
+                case "count":
+                    result = String.format("No. of students: %d", seznam_imePriimek.size());
+                    break;
+
                 case "remove":
                 case "search":
                     AbsStudent a;
@@ -140,20 +147,23 @@ public class SeznamiUV {
                     }
                     break;
 
-//                case "save":
-//                    if (sc.hasNext()) {
-//                        seznam.save(new FileOutputStream(sc.next()));
-//                    } else {
-//                        result = "Error: please specify a file name";
-//                    }
-//                    break;
-//                case "restore":
-//                    if (sc.hasNext()) {
-//                        seznam.restore(new FileInputStream(sc.next()));
-//                    } else {
-//                        result = "Error: please specify a file name";
-//                    }
-//                    break;
+                case "save":
+                    if (sc.hasNext()) {
+                        FileOutputStream fout = new FileOutputStream(sc.next());
+                        seznam_vpisne.save(fout);
+                        seznam_imePriimek.save(fout);
+                    } else {
+                        result = "Error: please specify a file name";
+                    }
+                    break;
+                case "restore":
+                    if (sc.hasNext()) {
+                        FileInputStream fin = new FileInputStream(sc.next());
+                        seznam_vpisne.restore(fin);
+                        seznam_imePriimek.restore(fin);                    } else {
+                        result = "Error: please specify a file name";
+                    }
+                    break;
                 default:
                     result = "Invalid command";
             }
@@ -162,12 +172,12 @@ public class SeznamiUV {
         } catch (java.util.NoSuchElementException e) {
             result = "Error: data structure is empty";
         }
-//        catch (IOException e) {
-//            result = "Error: IO error " + e.getMessage();
-//        }
-//        catch (ClassNotFoundException e) {
-//            result = "Error: Unknown format";
-//        }
+        catch (IOException e) {
+            result = "Error: IO error " + e.getMessage();
+        }
+        catch (ClassNotFoundException e) {
+            result = "Error: Unknown format";
+        }
         catch( OutOfMemoryError e){
             System.err.println(memoryError);
             return memoryError;

@@ -1,4 +1,6 @@
-public abstract class AbsStudent implements Student{
+import java.io.Serializable;
+
+public abstract class AbsStudent implements Student, Serializable {
     protected int id;
     protected String ime;
     protected String priimek;
