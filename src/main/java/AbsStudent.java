@@ -30,10 +30,6 @@ public abstract class AbsStudent implements Student, Serializable {
         this.priimek = priimek;
     }
 
-    public float getPovprecje() {
-        return povprecje;
-    }
-
     public void setPovprecje(float povprecje) {
         this.povprecje = povprecje;
     }

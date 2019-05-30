@@ -22,12 +22,12 @@ public class SeznamiUV {
         if (sc.hasNext()) {
             token = sc.next();
         } else {
-            return "Error: enter command";
+            return ">> Invalid argument";
         }
         if(token.equals("exit")){
             seznam_vpisne = null;
             seznam_imePriimek = null;
-            return "Goodbye";
+            return ">> Goodbye";
         }
 
         try {
@@ -72,15 +72,21 @@ public class SeznamiUV {
                         a = ((StudentVpisna) a).toImePriimek();
                         seznam_imePriimek.add((StudentImePriimek)a);
                     } else {
-                        result = "Error: Invalid input data";
+                        result = "Invalid argument";
                     }
                     break;
 
                 case "reset":
-                    System.out.print("reset> Are you sure (y|n): ");
-                    if("y".equals(stdin.next())){
-                        seznam_imePriimek = new Drevo23<>();
-                        seznam_vpisne = new Drevo23<>();
+                    if(!sc.hasNext()) {
+                        System.out.print("reset> Are you sure (y|n): ");
+                        if ("y".equals(stdin.next())) {
+                            seznam_imePriimek = new Drevo23<>();
+                            seznam_vpisne = new Drevo23<>();
+                        }
+
+                    }
+                    else{
+                        result = "Invalid argument";
                     }
                     break;
 
@@ -102,7 +108,7 @@ public class SeznamiUV {
                         a = seznam_vpisne.get(a.getId());
                         if("remove".equals(token)){
                             if(a == null){
-                                result = "Student does not exists";
+                                result = "Student does not exist";
                                 break;
                             }
                             seznam_vpisne.remove((StudentVpisna)a);
@@ -111,16 +117,28 @@ public class SeznamiUV {
 
                     } else {
                         a = new StudentImePriimek();
-                        System.out.print(token + "> First name: ");
-                        a.setIme(stdin.nextLine());
-                        System.out.print(token + "> Last name: ");
-                        a.setPriimek(stdin.nextLine());
+                        String ime;
+                        String priimek;
+                        System.out.print("search> First name: ");
+                        ime = stdin.nextLine();
+                        if(!ime.matches("[A-Za-z]+([ ]*[A-Za-z]*)*")){
+                            result = "Invalid input data";
+                            break;
+                        }
+                        a.setIme(ime);
 
+                        System.out.print("search> Last name: ");
+                        priimek = stdin.nextLine();
+                        if(!priimek.matches("[A-Za-z]+([ ]*[A-Za-z]*)*")){
+                            result = "Invalid input data";
+                            break;
+                        }
+                        a.setPriimek(priimek);
                         a = seznam_imePriimek.get(a.getIme(), a.getPriimek());
 
                         if("remove".equals(token)){
                             if(a == null){
-                                result = "Student does not exists";
+                                result = "Student does not exist";
                                 break;
                             }
                             seznam_vpisne.remove(((StudentImePriimek)a).toVpisna());
@@ -129,10 +147,10 @@ public class SeznamiUV {
                     }
                     if("search".equals(token)) {
                         if(a == null){
-                            result = "Student does not exists";
+                            result = "Student does not exist";
                             break;
                         }
-                        result = String.format("%d | %s, %s | %.1f", a.getId(), a.getPriimek(), a.getIme(), a.getPovprecje());
+                        result = a.toString();
                     }
                     break;
 
@@ -169,8 +187,6 @@ public class SeznamiUV {
             }
         } catch (IllegalArgumentException e) {
             result = "Error: Duplicated entry";
-        } catch (java.util.NoSuchElementException e) {
-            result = "Error: data structure is empty";
         }
         catch (IOException e) {
             result = "Error: IO error " + e.getMessage();
@@ -186,5 +202,4 @@ public class SeznamiUV {
 
         return ">> " + result;
     }
-
 }

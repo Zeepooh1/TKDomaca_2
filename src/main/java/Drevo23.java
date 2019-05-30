@@ -298,9 +298,6 @@ public class Drevo23<Tip extends Comparable> implements Seznam<Tip> {
 
     @Override
     public Tip remove(Tip e) {
-        if(!exists(e)){
-            throw new NoSuchElementException();
-        }
         Element23<Tip> affectedLeaf = deleteDownPhase(this.rootNode, e);
         while(affectedLeaf != null && affectedLeaf != rootNode) {
             affectedLeaf = deleteUpPhase(affectedLeaf);
