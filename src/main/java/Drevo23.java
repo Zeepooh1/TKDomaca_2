@@ -1,6 +1,4 @@
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -611,13 +609,14 @@ public class Drevo23<Tip extends Comparable> implements Seznam<Tip> {
             }
         }
         else{
+
+            preOrderAdd(list, currNode.L);
+            list.add(currNode.valOne);
+            preOrderAdd(list, currNode.S);
             if(currNode.numNode() == 2){
                 preOrderAdd(list, currNode.R);
                 list.add(currNode.valTwo);
             }
-            preOrderAdd(list, currNode.S);
-            list.add(currNode.valOne);
-            preOrderAdd(list, currNode.L);
         }
     }
 
@@ -720,17 +719,62 @@ public class Drevo23<Tip extends Comparable> implements Seznam<Tip> {
     }
 
     @Override
-    public void print() {
+    public String print() {
+        StringBuilder ret = new StringBuilder();
+        for(Tip i : asList()){
+            ret.append(i.toString() + "\n");
+        }
 
+        return ret.toString();
     }
 
     @Override
     public void save(OutputStream outputStream) throws IOException {
+        ObjectOutputStream out = new ObjectOutputStream(outputStream);
+        save(rootNode, out);
+    }
 
+    private void save(Element23<Tip> node, ObjectOutputStream out)throws IOException{
+        if(node.isLeaf()){
+            out.writeBoolean(true);
+            out.writeInt(node.numNode());
+            out.writeObject(node.valOne);
+            if(node.numNode() == 2){
+                out.writeObject(node.valTwo);
+            }
+
+        }
+        else{
+            out.writeBoolean(false);
+            out.writeInt(node.numNode());
+            save(node.L, out);
+            save(node.S, out);
+            if(node.numNode() == 2){
+                save(node.R, out);
+            }
+            out.writeObject(node.valOne);
+            if(node.numNode() == 2){
+                out.writeObject(node.valTwo);
+            }
+        }
     }
 
     @Override
     public void restore(InputStream inputStream) throws IOException, ClassNotFoundException {
+        ObjectInputStream in = new ObjectInputStream(inputStream);
+        rootNode = restore(in, null);
+    }
+
+    private Element23<Tip> restore(ObjectInputStream in, Element23<Tip> above) throws IOException, ClassNotFoundException{
+        Element23<Tip> node = new Element23<>(above);
+        boolean isLeaf = in.readBoolean();
+        if(isLeaf){
+            int numNode = in.readInt();
+            node.valOne = (Tip)in.readObject();
+            if(numNode == 2){
+                node.valTwo = (Tip)in.readObject();
+            }
+        }
 
     }
 }

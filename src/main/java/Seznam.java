@@ -37,7 +37,7 @@ public interface Seznam<Tip> {
     StudentImePriimek get(String ime, String priimek);
 
         //Izpiše podatkovno strukturo
-    void print();
+    String print();
 
     //shrani podatkovno strukturo v datoteko
     void save(OutputStream outputStream) throws IOException;

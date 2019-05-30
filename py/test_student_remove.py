@@ -1,7 +1,7 @@
 import pexpect
 
 
-def test_sk_print():
+def test_student_remove():
     baza = pexpect.pexpect()
 
     try:
@@ -76,4 +76,4 @@ def test_sk_print():
 
 
 if __name__ == "__main__":
-    test_sk_print()
+    test_student_remove()

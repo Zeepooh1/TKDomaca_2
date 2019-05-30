@@ -35,4 +35,8 @@ public abstract class AbsStudent implements Student{
     public void setPovprecje(float povprecje) {
         this.povprecje = povprecje;
     }
+
+    public String toString(){
+        return String.format("\t%d\t| %s, %s\t| %.1f", id, priimek, ime, povprecje);
+    }
 }

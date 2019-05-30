@@ -1,7 +1,7 @@
 import pexpect
 
 
-def test_student_serach():
+def test_student_print():
     baza = pexpect.pexpect()
 
     try:
@@ -42,42 +42,20 @@ def test_student_serach():
         baza.expect(">> OK")
 
         baza.expect("command> ")
-        baza.send("search 2")
-        baza.expect(">> 2 | Bozic, Aljaz | 3.2")
-
-        baza.expect("command> ")
-        baza.send("search")
-        baza.expect("search> First name: ")
-        baza.send("Janez")
-        baza.expect("search> Last name: ")
-        baza.send("Strazisar")
-        baza.expect(">> 3 | Strazisar, Janez | 7.3")
-
-        baza.expect("command> ")
-        baza.send("remove 1")
-        baza.expect(">> OK")
-
-        baza.expect("command> ")
-        baza.send("remove 2")
-        baza.expect(">> OK")
-
-        baza.expect("command> ")
-        baza.send("remove 3")
-        baza.expect(">> OK")
-
-        baza.expect("command> ")
         baza.send("print")
-        baza.expect(">> No. of students: 0")
+        baza.expect(">> No. of students: 3")
+        baza.expect("	1	| Bizjak, Zan	| 5.3")
+        baza.expect("	2	| Bozic, Aljaz	| 3.2")
+        baza.expect("	3	| Strazisar, Janez	| 7.3")
 
-
-        print "PASSED\ttest_student_search"
+        print "PASSED\ttest_student_print"
 
     except:
-        print "FAILED\ttest_student_search"
+        print "FAILED\ttest_student_print"
 
     finally:
         baza.kill()
 
 
 if __name__ == "__main__":
-    test_student_serach()
+    test_student_print()

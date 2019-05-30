@@ -128,11 +128,18 @@ public class SeznamiUV {
                         result = String.format("%d | %s, %s | %.1f", a.getId(), a.getPriimek(), a.getIme(), a.getPovprecje());
                     }
                     break;
-//
-//                case "print":
-//                    seznam.print();
-//                    break;
-//
+
+                case "print":
+                    int size = seznam_imePriimek.size();
+                    if(size > 0){
+                        result = String.format("No. of students: %d\n%s", size, seznam_imePriimek.print());
+
+                    }
+                    else{
+                        result = String.format("No. of students: %d", size);
+                    }
+                    break;
+
 //                case "save":
 //                    if (sc.hasNext()) {
 //                        seznam.save(new FileOutputStream(sc.next()));
