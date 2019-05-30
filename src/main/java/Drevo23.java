@@ -292,34 +292,8 @@ public class Drevo23<Tip extends Comparable> implements Seznam<Tip> {
     }
 
     @Override
-    public Tip removeFirst() {
-        if(isEmpty()){
-            throw new NoSuchElementException();
-        }
-        return remove(rootNode.valOne);
-    }
-
-    @Override
-    public Tip getFirst() {
-        if(isEmpty()){
-            throw new NoSuchElementException();
-        }
-        return rootNode.valOne;
-    }
-
-    @Override
     public int size() {
         return this.size;
-    }
-
-    @Override
-    public int depth() {
-        return depth;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return rootNode.numNode() == 0;
     }
 
     @Override
@@ -601,8 +575,8 @@ public class Drevo23<Tip extends Comparable> implements Seznam<Tip> {
     private void preOrderAdd(List<Tip> list, Element23<Tip> currNode){
         if(currNode.isLeaf()){
             if(currNode.numNode() == 2){
-                list.add(currNode.valTwo);
                 list.add(currNode.valOne);
+                list.add(currNode.valTwo);
             }
             else{
                 list.add(currNode.valOne);
@@ -614,8 +588,8 @@ public class Drevo23<Tip extends Comparable> implements Seznam<Tip> {
             list.add(currNode.valOne);
             preOrderAdd(list, currNode.S);
             if(currNode.numNode() == 2){
-                preOrderAdd(list, currNode.R);
                 list.add(currNode.valTwo);
+                preOrderAdd(list, currNode.R);
             }
         }
     }
