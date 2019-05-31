@@ -766,4 +766,6 @@ public class Drevo23<Tip extends Comparable> implements Seznam<Tip> {
         return node;
 
     }
+
+
 }

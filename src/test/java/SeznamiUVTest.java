@@ -3,7 +3,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.*;
 
 import static org.easymock.EasyMock.*;
@@ -25,7 +27,7 @@ public class SeznamiUVTest {
 
     @Before
     public void setUp() {
-        uv = new SeznamiUV(new Drevo23<>());
+        uv = new SeznamiUV();
 
         values = new ArrayList<>(Arrays.asList("LF","OL","SJ","MS","FZ","ZE","NO","UN","TG","QH","WY","HI","XR","AU","CC","DA","EB","GQ","RT","IP","JW","PM","VK","BX","YD","KV","VC","WN","YP","XM","UT","AW","DU","TX","RB","GI","FS","MY","IJ","BG","OV","JD","CZ","KE","LR","NF","HH","ZA","PO","SL","QQ","EK"));
         imena = new ArrayList<>(values);
@@ -58,11 +60,19 @@ public class SeznamiUVTest {
 
         System.setIn(new ByteArrayInputStream("I3me".getBytes()));
         assertEquals(">> Invalid input data", uv.processInput("add"));
-        System.setIn(new ByteArrayInputStream("234\nI3me".getBytes()));
+        System.setIn(new ByteArrayInputStream("12".getBytes()));
         assertEquals(">> Invalid input data", uv.processInput("add"));
-        System.setIn(new ByteArrayInputStream("234\nIme\nPr2mek".getBytes()));
+        System.setIn(new ByteArrayInputStream("64180012".getBytes()));
         assertEquals(">> Invalid input data", uv.processInput("add"));
-        System.setIn(new ByteArrayInputStream("234\nIme\nPrimek\npvop".getBytes()));
+        System.setIn(new ByteArrayInputStream("63170055\nI3me".getBytes()));
+        assertEquals(">> Invalid input data", uv.processInput("add"));
+        System.setIn(new ByteArrayInputStream("63170055\nIme\nPr2mek".getBytes()));
+        assertEquals(">> Invalid input data", uv.processInput("add"));
+        System.setIn(new ByteArrayInputStream("63170055\nIme\nPrimek\npvop".getBytes()));
+        assertEquals(">> Invalid input data", uv.processInput("add"));
+        System.setIn(new ByteArrayInputStream("63170055\nIme\nPrimek\n1.2".getBytes()));
+        assertEquals(">> Invalid input data", uv.processInput("add"));
+        System.setIn(new ByteArrayInputStream("63170055\nIme\nPrimek\n11.2".getBytes()));
         assertEquals(">> Invalid input data", uv.processInput("add"));
         assertEquals(">> Invalid argument", uv.processInput("add something"));
 
@@ -70,13 +80,13 @@ public class SeznamiUVTest {
 
         assertEquals(">> OK", uv.processInput("save test.bin"));
         for(int i = 0; i < ids.size(); i++){
-            assertEquals(">> OK", uv.processInput(String.format("remove %d", ids.get(i))));
+            assertEquals(">> OK", uv.processInput(String.format("remove %d", 63170000 + ids.get(i))));
         }
 
         assertEquals(">> OK", uv.processInput("restore test.bin"));
 
 
-        assertEquals(">> OK", uv.processInput(String.format("remove %d",ids.get(20))));
+        assertEquals(">> OK", uv.processInput(String.format("remove %d", 63170000 + ids.get(20))));
         assertEquals(">> Student does not exist", uv.processInput("remove 444"));
 
         System.setIn(new ByteArrayInputStream(String.format("%s\n%s", imena.get(10), priimki.get(10)).getBytes()));
@@ -88,12 +98,12 @@ public class SeznamiUVTest {
         System.setIn(new ByteArrayInputStream("Ime\nPr21imek".getBytes()));
         assertEquals(">> Invalid input data", uv.processInput("remove"));
 
-        assertEquals(String.format(">> \t%d\t| %s, %s\t| 5.2", ids.get(30), priimki.get(30), imena.get(30)), uv.processInput(String.format("search %d", ids.get(30))));
+        assertEquals(String.format(">> \t%d\t| %s, %s\t| 7.2", 63170000 + ids.get(30), priimki.get(30), imena.get(30)), uv.processInput(String.format("search %d", 63170000 + ids.get(30))));
 
         assertEquals(">> Invalid input data", uv.processInput("search test"));
 
         System.setIn(new ByteArrayInputStream(String.format("%s\n%s", imena.get(45), priimki.get(45)).getBytes()));
-        assertEquals(String.format(">> \t%d\t| %s, %s\t| 5.2", ids.get(45), priimki.get(45), imena.get(45)), uv.processInput("search"));
+        assertEquals(String.format(">> \t%d\t| %s, %s\t| 7.2", 63170000 + ids.get(45), priimki.get(45), imena.get(45)), uv.processInput("search"));
         assertEquals(">> Student does not exist", uv.processInput("search 123"));
 
         String p = uv.processInput("print");
@@ -125,10 +135,10 @@ public class SeznamiUVTest {
         assertTrue(uv.processInput("restore wrong_tree.bin").matches(">> Error: IO error.*"));
 
 
-        System.setIn(new ByteArrayInputStream("2\nIme\nPrimek\n2.2".getBytes()));
+        System.setIn(new ByteArrayInputStream("63170055\nIme\nPrimek\n7.2".getBytes()));
         assertEquals(">> OK", uv.processInput("add"));
 
-        System.setIn(new ByteArrayInputStream("2\nIme\nPrimek\n2.2".getBytes()));
+        System.setIn(new ByteArrayInputStream("63170055\nIme\nPrimek\n7.2".getBytes()));
         assertEquals(">> Error: Duplicated entry", uv.processInput("add"));
 
         assertEquals(">> Goodbye", uv.processInput("exit"));
@@ -144,19 +154,37 @@ public class SeznamiUVTest {
         Collections.shuffle(ids);
         List<ByteArrayInputStream> ret = new ArrayList<>();
         for(int i= 0; i < values.size(); i++){
-            sb.append(String.format("%d\n%s\n%s\n5.2", ids.get(i), imena.get(i), priimki.get(i)));
+            sb.append(String.format("%d\n%s\n%s\n7.2", 63170000 + ids.get(i), imena.get(i), priimki.get(i)));
             ret.add(new ByteArrayInputStream(sb.toString().getBytes()));
             sb = new StringBuilder();
         }
         return ret;
     }
 
-  /*  @Test
+    @Test
     public void testMockClassNotFound(){
-        Seznam mock = EasyMock.createMock(Seznam.class);
-        mock.restore(anyObject(new InputStream("12")));
-        SeznamiUV sez = n
-    }*/
+        Seznam<StudentVpisna> mock = EasyMock.createMock(Seznam.class);
+        Seznam<StudentImePriimek> mock2 = EasyMock.createMock(Seznam.class);
+
+        try {
+            mock.restore(anyObject());
+        }catch (IOException e){}
+        catch(ClassNotFoundException e){}
+        expectLastCall().andThrow(new ClassNotFoundException());
+        replay(mock);
+
+        SeznamiUV sez = new SeznamiUV();
+        sez.addImpl(mock, mock2);
+        assertTrue(sez.processInput("restore re.bin").matches(">> Error: Unknown format.*"));
+
+    }
+
+    @Test
+    public void testMockOutOfMemory(){
+        SeznamiUV sez = new SeznamiUV();
+        sez.addImpl(new Drevo23Mock<StudentVpisna>(), new Drevo23Mock<StudentImePriimek>());
+        assertEquals(">> Error: not enough memory, operation failed", sez.processInput("save dsa.bin"));
+    }
 
     // *****************
     // POMOZNE METODE

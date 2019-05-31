@@ -11,18 +11,15 @@ public class SeznamiUV {
     Seznam<StudentVpisna> seznam_vpisne;
     Seznam<StudentImePriimek> seznam_imePriimek;
 
-    public SeznamiUV(Object o) {
-        Class<? extends Object> a = o.getClass();
-        try {
-            seznam_vpisne = (Seznam<StudentVpisna>)a.newInstance();
-            seznam_imePriimek = (Seznam<StudentImePriimek>)a.newInstance();
-        }
-        catch(IllegalAccessException e){
+    public SeznamiUV() {
+        seznam_vpisne = new Drevo23<>();
+        seznam_imePriimek = new Drevo23<>();
 
-        }
-        catch(InstantiationException e){
+    }
 
-        }
+    public void addImpl(Seznam<StudentVpisna> seznam_vpisne, Seznam<StudentImePriimek> seznam_imePriimek) {
+        this.seznam_vpisne = seznam_vpisne;
+        this.seznam_imePriimek = seznam_imePriimek;
     }
 
     public String processInput(String input) {
@@ -55,6 +52,10 @@ public class SeznamiUV {
                             result = "Invalid input data";
                             break;
                         }
+                        if(a.getId() < 63000000 || a.getId() >= 64000000){
+                            result = "Invalid input data";
+                            break;
+                        }
                         stdin.nextLine();
                         System.out.print("add> First name: ");
                         ime = stdin.nextLine();
@@ -75,6 +76,10 @@ public class SeznamiUV {
                         try{
                             a.setPovprecje(stdin.nextFloat());
                         }catch(InputMismatchException e){
+                            result = "Invalid input data";
+                            break;
+                        }
+                        if(a.getPovprecje() < 6.0f || a.getPovprecje() > 10.0f){
                             result = "Invalid input data";
                             break;
                         }
@@ -207,7 +212,7 @@ public class SeznamiUV {
         }
         catch( OutOfMemoryError e){
             System.err.println(memoryError);
-            return memoryError;
+            result =  memoryError;
         }
 
 
