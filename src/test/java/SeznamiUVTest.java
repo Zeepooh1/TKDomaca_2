@@ -1,11 +1,17 @@
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.*;
 
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import org.easymock.EasyMock;
+
 
 public class SeznamiUVTest {
 
@@ -19,7 +25,7 @@ public class SeznamiUVTest {
 
     @Before
     public void setUp() {
-        uv = new SeznamiUV();
+        uv = new SeznamiUV(new Drevo23<>());
 
         values = new ArrayList<>(Arrays.asList("LF","OL","SJ","MS","FZ","ZE","NO","UN","TG","QH","WY","HI","XR","AU","CC","DA","EB","GQ","RT","IP","JW","PM","VK","BX","YD","KV","VC","WN","YP","XM","UT","AW","DU","TX","RB","GI","FS","MY","IJ","BG","OV","JD","CZ","KE","LR","NF","HH","ZA","PO","SL","QQ","EK"));
         imena = new ArrayList<>(values);
@@ -61,6 +67,14 @@ public class SeznamiUVTest {
         assertEquals(">> Invalid argument", uv.processInput("add something"));
 
         assertEquals(">> Invalid command", uv.processInput("sadfsd"));
+
+        assertEquals(">> OK", uv.processInput("save test.bin"));
+        for(int i = 0; i < ids.size(); i++){
+            assertEquals(">> OK", uv.processInput(String.format("remove %d", ids.get(i))));
+        }
+
+        assertEquals(">> OK", uv.processInput("restore test.bin"));
+
 
         assertEquals(">> OK", uv.processInput(String.format("remove %d",ids.get(20))));
         assertEquals(">> Student does not exist", uv.processInput("remove 444"));
@@ -136,6 +150,13 @@ public class SeznamiUVTest {
         }
         return ret;
     }
+
+  /*  @Test
+    public void testMockClassNotFound(){
+        Seznam mock = EasyMock.createMock(Seznam.class);
+        mock.restore(anyObject(new InputStream("12")));
+        SeznamiUV sez = n
+    }*/
 
     // *****************
     // POMOZNE METODE

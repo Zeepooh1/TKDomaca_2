@@ -172,4 +172,35 @@ public class Drevo23Test {
         String v = "(30)(17)(16)(15)(13)(6,12)(7,8)(0)";
         assertEquals(v, tree.toString());
     }
+
+    @Test
+    public void testDuplicate(){
+        Drevo23<Integer> tree = new Drevo23<>();
+        tree.add(15);
+        tree.add(6);
+        tree.add(30);
+        tree.add(17);
+        tree.add(12);
+        tree.add(13);
+        tree.add(16);
+        tree.add(0);
+        tree.add(7);
+        tree.add(8);
+        boolean caught = false;
+        try{
+            tree.add(6);
+        }
+        catch(IllegalArgumentException e){ caught = true;}
+        assertTrue(caught);
+
+        caught = false;
+        try{
+            tree.add(12);
+        }
+        catch(IllegalArgumentException e){ caught = true;}
+        assertTrue(caught);
+
+
+
+    }
 }

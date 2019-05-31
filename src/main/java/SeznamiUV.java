@@ -1,3 +1,5 @@
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,9 +11,18 @@ public class SeznamiUV {
     Seznam<StudentVpisna> seznam_vpisne;
     Seznam<StudentImePriimek> seznam_imePriimek;
 
-    public SeznamiUV() {
-        seznam_vpisne = new Drevo23<>();
-        seznam_imePriimek = new Drevo23<>();
+    public SeznamiUV(Object o) {
+        Class<? extends Object> a = o.getClass();
+        try {
+            seznam_vpisne = (Seznam<StudentVpisna>)a.newInstance();
+            seznam_imePriimek = (Seznam<StudentImePriimek>)a.newInstance();
+        }
+        catch(IllegalAccessException e){
+
+        }
+        catch(InstantiationException e){
+
+        }
     }
 
     public String processInput(String input) {

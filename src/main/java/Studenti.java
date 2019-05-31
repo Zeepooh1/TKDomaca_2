@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 public class Studenti {
     public static void main(String[] args)
     {
-        SeznamiUV seznamiUV = new SeznamiUV();
+        SeznamiUV seznamiUV = new SeznamiUV(new Drevo23<>());
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String input;
         String output;
